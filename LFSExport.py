@@ -62,15 +62,13 @@ filelist = [file18]
 finalfile = 'Weekly Updates\\'+today+'.txt'
 finalexcel = 'Weekly Updates\\CLFSS '+today+'.xlsx'
 numlines = 0
+quesid = data['questionnaire_identity']
 
 argscawi1 = {
-    "questionnaire_identity": "261f79f7f7e94227ade7808764e4310b$18",
+    "questionnaire_identity": quesid,
     "export_type": etype,
-    "interview_status": istatus,
+    "interview_status": istatus
 }
-
-#for q in ssaw.QuestionnairesApi(client, workspace='cen2').get_list():
-#    print(q.title)
 
 # without export_path parameter file will be saved
 # in the current working directory
@@ -83,9 +81,9 @@ print('Getting LFS data V18 in tab format...')
 # there is no ready export, start a new job
 if generate == True:
     job = ExportJob(**argscawi1)
-    job = ExportApi(client, workspace='lfs').start(job, wait=True, show_progress=True)
+    job = ExportApi(client, workspace=data['workspace']).start(job, wait=True, show_progress=True)
 print("Downloading...")
-response = ExportApi(client, workspace='lfs').get(**argscawi1, show_progress=True)
+response = ExportApi(client, workspace=data['workspace']).get(**argscawi1, show_progress=True)
 os.rename('CLFSS_18_Tabular_'+istatus+'.zip', 'CLFSS_18_Tabular_'+istatus+'('+today+').zip')
 print('Done!\n')
 os.system(szip+r'CLFSS_18_Tabular_'+istatus+'('+today+').zip"')
