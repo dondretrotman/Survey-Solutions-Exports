@@ -41,5 +41,5 @@ In the format:
 4.1 - Changed questionnaire status to "ALL", Changed filename variables to accommodate different questionnaire statuses  
 5.0 - Exports to MSExcel worksheet  
 5.1 - Changed it to work locally on the server  
-5.2 - Changed to Version 18 of the questionnaire
-5.3 - Moved all survey specific variables to the config file
+5.2 - Changed to Version 18 of the questionnaire  
+5.3 - Moved all survey specific variables to the config file (making 5.2 a non-issue)  
