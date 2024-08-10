@@ -3,8 +3,8 @@ Script to export Survey Solutions Data to Excel
 
 ## Title: LFS data downloader
 **Description:** This uses the Survey Solutions API to generate a Data package, download and extract it  
-**Version:** 5.2  
-**Date:** 2024-08-07  
+**Version:** 5.3  
+**Date:** 2024-08-10  
 **Author:** Dondre Trotman  
 
 **Notes:**  
@@ -20,6 +20,7 @@ It requires a json config file in the same directory named api.json that contain
 - api_password - Password for the api username
 - workspace - name of the workspace (usually "default")
 - homedir - The full path to the working directory
+- questionnaire_identity - The id and version of the survey solution identity. You can get this by going to Survey Setup->Questionnaires->Click on the questionnaire->Details, and copy everything after "Questionnaires/Details/" in the address bar. Remove any dashes.
 In the format:  
 ```json
 {
@@ -28,6 +29,7 @@ In the format:
     "api_password": "API PASSWORD",
     "workspace": "WORKSPACE NAME",
     "homedir": "\\path\\to\\working\\directory\\"
+    "questionnaire_identity": "61578538f9ecb1e6a12ac516d8474172$29"
 }
 ```
 
@@ -40,3 +42,4 @@ In the format:
 5.0 - Exports to MSExcel worksheet  
 5.1 - Changed it to work locally on the server  
 5.2 - Changed to Version 18 of the questionnaire
+5.3 - Moved all survey specific variables to the config file
