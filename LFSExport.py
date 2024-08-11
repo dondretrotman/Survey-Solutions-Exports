@@ -1,13 +1,13 @@
 # Title: LFS data downloader
 # Description: This uses the Survey Solutions API to generate a Data package, download and extract it
-# Version: 5.0
-# Date: 2024-06-25
+# Version: 5.2
+# Date: 2024-08-09
 # Author: Dondre Trotman
 # Notes: This script assumes that you have 7zip installed and set as a path (so that it can be called withtout stating the path)
 #        It also assumes that you have the SSAW, pandas and openpyxl modules installed. Run the following in a command prompt if they are is not: pip install SSAW pandas openpyxl
 #        the pydantic module should be version 1.9.0 (pip install --force-reinstall "pydantic==1.9.0")
-#        Make sure that \\statserver.gov.bb\censussurveys is mapped to the M: drive
-#        Run "runpy.bat" to run the script 
+#        It also requires a directory named "Weekly Updates" to export the completed files to.
+#        Run "runpy.bat" to run the script (not included)
 #Changelog: 
 #1.0 - Initial release. Grabs the data and extracts it
 #2.0 - Prints all output to file as well as the screen, including 7zip
@@ -33,7 +33,7 @@ class Logger(object):
         self.log = open("ssawlog.txt", "a")
         
     def write(self, message):
-        self.terminal.write(message)
+#        self.terminal.write(message)
         self.log.write(message)
         
     def flush(self):
