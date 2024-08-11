@@ -7,7 +7,7 @@
 #        It also assumes that you have the SSAW, pandas and openpyxl modules installed. Run the following in a command prompt if they are is not: pip install SSAW pandas openpyxl
 #        the pydantic module should be version 1.9.0 (pip install --force-reinstall "pydantic==1.9.0")
 #        It also requires a directory named "Weekly Updates" to export the completed files to.
-#        Run "runpy.bat" to run the script (not included)
+#        Run "runpy.bat" to run the script (not included, basically runs `py -X utf8 LFSExport.py`)
 #Changelog: 
 #1.0 - Initial release. Grabs the data and extracts it
 #2.0 - Prints all output to file as well as the screen, including 7zip
