@@ -1,7 +1,7 @@
 # Title: LFS data downloader
 # Description: This uses the Survey Solutions API to generate a Data package, download and extract it
-# Version: 5.2
-# Date: 2024-08-09
+# Version: 5.3
+# Date: 2024-08-11
 # Author: Dondre Trotman
 # Notes: This script assumes that you have 7zip installed and set as a path (so that it can be called withtout stating the path)
 #        It also assumes that you have the SSAW, pandas and openpyxl modules installed. Run the following in a command prompt if they are is not: pip install SSAW pandas openpyxl
@@ -17,6 +17,7 @@
 #5.0 - Exports to MSExcel worksheet
 #5.1 - Changed it to work locally on the server
 #5.2 - Changed to Version 18 of the questionnaire
+#5.3 - Fixed bug preventing the script from running twice in the same day
 
 import ssaw, os, winsound, sys, fileinput, time, json
 import pandas as pd
@@ -84,7 +85,7 @@ if generate == True:
     job = ExportApi(client, workspace=data['workspace']).start(job, wait=True, show_progress=True)
 print("Downloading...")
 response = ExportApi(client, workspace=data['workspace']).get(**argscawi1, show_progress=True)
-os.rename('CLFSS_18_Tabular_'+istatus+'.zip', 'CLFSS_18_Tabular_'+istatus+'('+today+').zip')
+move('CLFSS_18_Tabular_'+istatus+'.zip', 'CLFSS_18_Tabular_'+istatus+'('+today+').zip')
 print('Done!\n')
 os.system(szip+r'CLFSS_18_Tabular_'+istatus+'('+today+').zip"')
 
