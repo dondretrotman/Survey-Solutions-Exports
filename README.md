@@ -12,7 +12,9 @@ This script assumes that you have 7zip installed and set as a path (so that it c
 
 It also assumes that you have the SSAW, pandas and openpyxl modules installed. Run the following in a command prompt if they are not: `pip install SSAW pandas openpyxl`. 
 
-The pydantic module should be version 1.9.0 (`pip install --force-reinstall "pydantic==1.9.0"`). 
+The pydantic module should be version 1.9.0 (`pip install --force-reinstall "pydantic==1.9.0"`).   
+
+It also requires a directory named "Weekly Updates" to export the completed files to.
 
 It requires a json config file in the same directory named api.json that contains values for:
 - url - The URL to your Survey solutions instance
@@ -43,3 +45,4 @@ In the format:
 5.1 - Changed it to work locally on the server  
 5.2 - Changed to Version 18 of the questionnaire  
 5.3 - Moved all survey specific variables to the config file (making 5.2 a non-issue)  
+5.4 - Fixed bug preventing the script from running twice in the same day  
