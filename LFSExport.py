@@ -1,15 +1,17 @@
 # Title: LFS data downloader
 # Description: This uses the Survey Solutions API to generate a Data package, download and extract it
-# Version: 5.4
-# Date: 2024-08-11
+# Version: 6.0
+# Date: 2024-08-14
 # Author: Dondre Trotman
 # Notes: This script assumes that you have 7zip installed and set as a path (so that it can be called withtout stating the path)
 #        It also assumes that you have the SSAW, pandas and openpyxl modules installed. Run the following in a command prompt if they are is not: pip install SSAW pandas openpyxl
 #        the pydantic module should be version 1.9.0 (pip install --force-reinstall "pydantic==1.9.0")
 #        It also requires a directory named "Weekly Updates" to export the completed files to.
 #        Run "runpy.bat" to run the script (not included, basically runs `py -X utf8 LFSExport.py`)
+#TODO: Maybe use zipfile module instead of 7zip
+#
 
-import ssaw, os, winsound, sys, fileinput, time, json
+import ssaw, os, winsound, sys, fileinput, time, json, urllib.request
 import pandas as pd
 from ssaw import ExportApi
 from ssaw.models import ExportJob
@@ -38,11 +40,11 @@ with open('api.json', 'r') as apifile:
 client = ssaw.Client(url=data['url'], api_user=data['api_user'], api_password=data['api_password'], workspace=data['workspace'])
 
 # generate the job first (True) or just download (False)? True is required to ensure that the latest data is downloaded. False is useful if redownloading recently downloaded data.
-generate = False
+generate = True
 # Type of export. Possible values are Tabular, STATA, SPSS, Binary, DDI, Paradata
 etype = "Tabular"
 # Questionnaire status. Possible values are  All, SupervisorAssigned, InterviewerAssigned, Completed, RejectedBySupervisor, ApprovedBySupervisor, RejectedByHeadquarters, ApprovedByHeadquarters
-istatus = "ALL"
+istatus = "All"
 starttime = datetime.now()
 today = str(date.today())
 szip = r'start 7z x -aoa -o* '
@@ -55,7 +57,17 @@ finalexcel = 'Weekly Updates\\CLFSS '+today+'.xlsx'
 numlines = 0
 quesid = data['questionnaire_identity']
 
-argscawi1 = {
+#For some reason the ExportJob function takes the questionnaire identity as questionnaire_id but the ExportApi function has questionnaire_identity
+#So I have to pass the arguments slightly differently for each function. Have no idea why it suddenly needed this distinction since at the time of this writing
+#the last change to SSAW was like a year ago
+argsexportjob = {
+    "questionnaire_id": quesid,
+    "export_type": etype,
+    "interview_status": istatus,
+    "include_meta": False
+}
+
+argsexportapi = {
     "questionnaire_identity": quesid,
     "export_type": etype,
     "interview_status": istatus
@@ -69,13 +81,20 @@ print('Be patient! Some files can take a while to download')
 
 #Labourforce v18
 print('Getting LFS data V18 in tab format...')
+#check if the site is responding. 
+urllib.request.urlopen(data['url']).getcode()
 # there is no ready export, start a new job
-if generate == True:
-    job = ExportJob(**argscawi1)
-    job = ExportApi(client, workspace=data['workspace']).start(job, wait=True, show_progress=True)
-print("Downloading...")
-response = ExportApi(client, workspace=data['workspace']).get(**argscawi1, show_progress=True)
-move('CLFSS_18_Tabular_'+istatus+'.zip', 'CLFSS_18_Tabular_'+istatus+'('+today+').zip')
+if generate == True and urllib.request.urlopen(data['url']).getcode() == 200:
+    job = ExportJob(**argsexportjob)
+    response = ExportApi(client, workspace=data['workspace']).start(job, wait=True, show_progress=True)
+    print("Downloading...")
+    response = ExportApi(client, workspace=data['workspace']).get(**argsexportapi, show_progress=True)
+elif generate == False and urllib.request.urlopen(data['url']).getcode() == 200:
+    print("Downloading...")
+    response = ExportApi(client, workspace=data['workspace']).get(**argsexportapi, show_progress=True)
+else:
+    sys.exit(f"Cannot connect to site, or invalid generate ({generate})")
+move('CLFSS_18_Tabular_'+istatus+'_no-meta.zip', 'CLFSS_18_Tabular_'+istatus+'('+today+').zip')
 print('Done!\n')
 os.system(szip+r'CLFSS_18_Tabular_'+istatus+'('+today+').zip"')
 
