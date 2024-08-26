@@ -100,13 +100,11 @@ print('Getting LFS data V18 in tab format...')
     
 #Use try/except statements to capture errors, loop 3 times
 while i > 0:
+    print(f'Trying to connect to {data['url']} up to {i} time(s)')
     try:
         httpresponse = urlopen(data['url'])
-    except HTTPError as e:
-        print('HTTP error code: ', e.code)
-        i = i - 1
     except URLError as e:
-        print(f'Error reason: {e.reason}, trying {i} more time(s)')
+        print(f'Error reason: {e.reason}')
         i = i - 1
     else:
         if generate == True:
