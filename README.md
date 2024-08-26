@@ -3,8 +3,8 @@ Script to export Survey Solutions Data to Excel
 
 ## Title: LFS data downloader
 **Description:** This uses the Survey Solutions API to generate a Data package, download and extract it  
-**Version:** 6.0  
-**Date:** 2024-08-14  
+**Version:** 6.1  
+**Date:** 2024-08-26  
 **Author:** Dondre Trotman  
 
 **Notes:**  
@@ -47,3 +47,7 @@ In the format:
 5.3 - Moved all survey specific variables to the config file (making 5.2 a non-issue)  
 5.4 - Fixed bug preventing the script from running twice in the same day  
 6.0 - Added checks to make sure that the site is up before connecting. Fixed the arguments for exporting and downloading  
+6.1 - Fixed checks that make sure that the site is up before connecting. It now gracefully exits if no proper response.  
+  
+## TODO:  
+Fix the filenames so that they are more generalised

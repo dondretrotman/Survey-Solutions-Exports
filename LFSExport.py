@@ -1,7 +1,7 @@
 # Title: LFS data downloader
 # Description: This uses the Survey Solutions API to generate a Data package, download and extract it
-# Version: 6.0
-# Date: 2024-08-14
+# Version: 6.1
+# Date: 2024-08-26
 # Author: Dondre Trotman
 # Notes: This script assumes that you have 7zip installed and set as a path (so that it can be called withtout stating the path)
 #        It also assumes that you have the SSAW, pandas and openpyxl modules installed. Run the following in a command prompt if they are is not: pip install SSAW pandas openpyxl
@@ -100,7 +100,7 @@ print('Getting LFS data V18 in tab format...')
     
 #Use try/except statements to capture errors, loop 3 times
 while i > 0:
-    print(f'Trying to connect to {data['url']} up to {i} time(s)')
+    print(f"Trying to connect to {data['url']} up to {i} time(s)")
     try:
         httpresponse = urlopen(data['url'])
     except URLError as e:
@@ -112,11 +112,15 @@ while i > 0:
             response = ExportApi(client, workspace=data['workspace']).start(job, wait=True, show_progress=True)
             print("Downloading...")
             response = ExportApi(client, workspace=data['workspace']).get(**argsexportapi, show_progress=True)
+            i = -99
             break
         elif generate == False:
             response = ExportApi(client, workspace=data['workspace']).get(**argsexportapi, show_progress=True)
+            i= -99
             break
 
+if i != -99:
+    sys.exit(f"Cannot connect to {data['url']}")
 move('CLFSS_18_Tabular_'+istatus+'_no-meta.zip', 'CLFSS_18_Tabular_'+istatus+'('+today+').zip')
 print('Done!\n')
 os.system(szip+r'CLFSS_18_Tabular_'+istatus+'('+today+').zip"')
